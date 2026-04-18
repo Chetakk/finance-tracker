@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finance Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <div class="logo-wrap">💰</div>
+      <div>
+        <h1>Finance Dashboard</h1>
+        <p id="headerDate"></p>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="openModal()">＋ Add Expense</button>
+  </header>
+
+  <!-- Cards -->
+  <div class="cards">
+    <div class="card card-spent">
+      <div class="card-glow"></div>
+      <p class="card-label"><span>💸</span> Total Spent</p>
+      <h2 id="totalSpent">$0.00</h2>
+      <p class="card-sub" id="spentSub">across 0 transactions</p>
+    </div>
+
+    <div class="card card-budget">
+      <div class="card-glow"></div>
+      <p class="card-label"><span>🎯</span> Budget Left</p>
+      <h2 id="budgetLeft">$0.00</h2>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="budget-row">
+        <p class="card-sub" id="budgetSub">of $0.00 budget</p>
+        <button class="edit-budget" onclick="editBudget()">edit →</button>
+      </div>
+    </div>
+
+    <div class="card card-count">
+      <div class="card-glow"></div>
+      <p class="card-label"><span>📊</span> Transactions</p>
+      <h2 id="txCount">0</h2>
+      <p class="card-sub" id="topCat">—</p>
+    </div>
+  </div>
+
+  <!-- Chart + Transactions -->
+  <div class="main-grid">
+    <div class="chart-box">
+      <p class="section-title">By Category</p>
+      <div class="chart-wrap">
+        <canvas id="donutChart"></canvas>
+        <div class="chart-center-label" id="centerLabel" style="display:none">
+          <div class="center-amount" id="centerAmount"></div>
+          <div class="center-sub">total</div>
+        </div>
+        <div id="noChart" class="no-data">Add expenses to see your breakdown</div>
+      </div>
+    </div>
+
+    <div class="tx-box">
+      <p class="section-title">Recent Transactions</p>
+      <div id="txList" class="tx-list"></div>
+      <div id="noTx" class="no-data">No transactions yet — add one above</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="closeModal()"></div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-header">
+    <h3>New Expense</h3>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+  </div>
+
+  <form id="expenseForm" onsubmit="submitExpense(event)">
+    <div class="form-group">
+      <label>Amount (₹)</label>
+      <input type="number" id="amount" min="0.01" step="0.01" placeholder="0.00" required />
+
+    </div>
+
+    <div class="form-group">
+      <label>Category</label>
+      <div class="cat-pills">
+        <div class="cat-pill pill-food active"     data-cat="Food">🍔 Food</div>
+        <div class="cat-pill pill-transport"       data-cat="Transport">🚗 Transport</div>
+        <div class="cat-pill pill-shopping"        data-cat="Shopping">🛍️ Shopping</div>
+        <div class="cat-pill pill-bills"           data-cat="Bills">📄 Bills</div>
+        <div class="cat-pill pill-health"          data-cat="Health">💊 Health</div>
+        <div class="cat-pill pill-entertainment"   data-cat="Entertainment">🎬 Entertainment</div>
+        <div class="cat-pill pill-other"           data-cat="Other">📦 Other</div>
+      </div>
+      <input type="hidden" id="category" value="Food" />
+    </div>
+
+    <div class="form-group">
+      <label>Note <span style="color:#2a2a4a;font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <input type="text" id="note" placeholder="e.g. Weekly groceries" />
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button>
+      <button type="submit" class="btn-primary">Add Expense</button>
+    </div>
+  </form>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
